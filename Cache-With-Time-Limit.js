@@ -1,4 +1,4 @@
-/**************************\U0001f60e**************************/
+
 class TimeLimitedCache {
   constructor() {
     this.cache = new Map();
