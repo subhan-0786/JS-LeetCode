@@ -1,51 +1,29 @@
-
+/**************************\U0001f60e**************************/
 class TimeLimitedCache {
   constructor() {
     this.cache = new Map();
   }
 
-  set(key, value, duration) {
-    const now = Date.now();
-    // Check if key exists and not expired
-    const exists = this.cache.has(key) && this.cache.get(key).expiry > now;
-
-    // Set/overwrite with new value and expiry time
-    this.cache.set(key, { value, expiry: now + duration });
-
-    // Schedule cleanup after duration expires
+  set(e, t, c) {
+    const h = Date.now(),
+      s = this.cache.has(e) && this.cache.get(e).expiry > h;
+    this.cache.set(e, { value: t, expiry: h + c });
     setTimeout(() => {
-      if (this.cache.has(key) && this.cache.get(key).expiry <= Date.now()) {
-        this.cache.delete(key);
-      }
-    }, duration);
-
-    return exists;
+      this.cache.has(e) && this.cache.get(e).expiry <= Date.now() && this.cache.delete(e);
+    }, c);
+    return s;
   }
 
-  get(key) {
-    const now = Date.now();
-    const entry = this.cache.get(key);
-
-    // Return value if exists and not expired
-    if (entry && entry.expiry > now) return entry.value;
-
-    // Otherwise, delete expired entry and return -1
-    this.cache.delete(key);
-    return -1;
+  get(e) {
+    const t = Date.now(),
+      c = this.cache.get(e);
+    return c && c.expiry > t ? c.value : (this.cache.delete(e), -1);
   }
 
   count() {
-    const now = Date.now();
-    let count = 0;
-
-    for (const [key, entry] of this.cache) {
-      if (entry.expiry > now) {
-        count++;
-      } else {
-        this.cache.delete(key);
-      }
-    }
-
-    return count;
+    const e = Date.now();
+    let t = 0;
+    for (const [c, h] of this.cache) h.expiry > e ? t++ : this.cache.delete(c);
+    return t;
   }
 }
